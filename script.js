@@ -6,6 +6,7 @@ function setTipoAzienda(tipo) {
   tipoAzienda = tipo;
   document.getElementById('calcolo-container').style.display = 'block';
   document.getElementById('storico-fatture').style.display = 'block';
+  document.getElementById('pagamenti-previsti').style.display = 'block';
 }
 
 function getTrimestre(data) {
@@ -39,6 +40,7 @@ function aggiungiFattura() {
   fatture.push(fattura);
   aggiornaStorico();
   aggiornaResiduo();
+  aggiornaPagamenti();
 }
 
 function aggiornaStorico() {
@@ -68,8 +70,22 @@ function aggiornaResiduo() {
   document.getElementById("residuo").textContent = `€ ${residuo.toLocaleString('it-IT', { minimumFractionDigits: 2 })}`;
 }
 
+function aggiornaPagamenti() {
+  const totaleImposte = fatture.reduce((acc, f) => acc + f.imposta, 0);
+  const saldo = totaleImposte;
+  const primoAcconto = saldo * 0.4;
+  const secondoAcconto = saldo * 0.6;
+
+  document.getElementById("pagamenti").innerHTML = `
+    <strong>Saldo 30 giugno:</strong> € ${saldo.toFixed(2)}<br>
+    <strong>Primo Acconto 30 giugno (40%):</strong> € ${primoAcconto.toFixed(2)}<br>
+    <strong>Secondo Acconto 30 novembre (60%):</strong> € ${secondoAcconto.toFixed(2)}
+  `;
+}
+
 function eliminaFattura(index) {
   fatture.splice(index, 1);
   aggiornaStorico();
   aggiornaResiduo();
+  aggiornaPagamenti();
 }

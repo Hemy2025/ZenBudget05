@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda Fiscale per il Regime Forfettario</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 30px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      width: 100%;
+      max-width: 900px;
+    }
+    header img {
+      height: 180px;
+      margin-right: 20px;
+    }
+    header h1 {
+      font-size: 24px;
+    }
+    #main-container {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 30px;
+      width: 100%;
+      max-width: 1000px;
+    }
+    #calcolo-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 5px;
+      width: 85%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #storico-fatture {
+      margin-top: 30px;
+      text-align: left;
+      width: 90%;
+      max-width: 950px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      font-size: 14px;
+    }
+    th {
+      background-color: #eee;
+    }
+    #fatturabile-box {
+      border: 2px solid #007bff;
+      border-radius: 12px;
+      padding: 20px;
+      background-color: #ffffff;
+      width: 250px;
+      font-size: 16px;
+    }
+    .delete-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: red;
+      font-size: 16px;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #777;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png?v=3" alt="Logo">
+    <h1>Agenda Fiscale per il Regime Forfettario</h1>
+  </header>
+
+  <div id="main-container">
+    <div>
+      <div id="tipo-azienda-container">
+        <h2>Seleziona il tuo regime</h2>
+        <button onclick="setTipoAzienda('start-up')">Start-Up (5%)</button>
+        <button onclick="setTipoAzienda('forfettario')">Standard (15%)</button>
+      </div>
+
+      <div id="calcolo-container" style="display:none;">
+        <label for="previdenza">Tipo di Previdenza:</label>
+        <select id="previdenza">
+          <option value="gestione-separata">Gestione Separata INPS</option>
+          <option value="cassa-privata">Cassa Previdenziale</option>
+        </select><br>
+
+        <label for="ateco">Codice ATECO:</label>
+        <select id="ateco">
+          <option value="0.78">Attività Professionali (78%)</option>
+          <option value="0.62">Servizi di Supporto (62%)</option>
+          <option value="0.40">Commercio (40%)</option>
+          <option value="0.86">Industria/Artigianato (86%)</option>
+        </select><br>
+
+        <label for="data">Data Fattura:</label>
+        <input type="date" id="data"><br>
+
+        <label for="fatturato">Importo fattura (€):</label>
+        <input type="number" id="fatturato" placeholder="Es: 1000"><br><br>
+
+        <button onclick="aggiungiFattura()">Aggiungi Fattura</button>
+      </div>
+    </div>
+
+    <div id="fatturabile-box">
+      <h3>Residuo Fatturabile</h3>
+      <p id="residuo">€ 85.000,00</p>
+    </div>
+  </div>
+
+  <div id="storico-fatture" style="display:none;">
+    <h3>Storico Fatture</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Importo</th>
+          <th>Imponibile</th>
+          <th>INPS/Cassa</th>
+          <th>Imposta</th>
+          <th>Totale</th>
+          <th>Netto</th>
+          <th>Trimestre</th>
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody id="lista-fatture"></tbody>
+    </table>
+    <h4 id="totali-trimestre"></h4>
+  </div>
+
+  <footer>
+    © 2025 - Hemy Srls
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

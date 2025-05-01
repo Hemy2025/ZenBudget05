@@ -1,4 +1,4 @@
-// script.js aggiornato con posizionamento preciso dei dati nel PDF F24
+// script.js aggiornato con posizionamento corretto dei tributi nella colonna a debito e nuove coordinate
 
 let tipoAzienda = '';
 let fatture = [];
@@ -167,28 +167,23 @@ async function generaF24PDF() {
   if (tipoPagamento === 'saldo') {
     doc.text('8846', 20, 127);
     doc.text(`${anno - 1}`, 85, 127);
-    doc.text(saldo.toFixed(2).replace('.', ','), 160, 127);
+    doc.text(saldo.toFixed(2).replace('.', ','), 130, 127); // X -30mm da 160 → 130
 
     doc.text('8847', 20, 131);
     doc.text(`${anno}`, 85, 131);
-    doc.text(acconto1.toFixed(2).replace('.', ','), 160, 131);
+    doc.text(acconto1.toFixed(2).replace('.', ','), 130, 131); // X -30mm da 160 → 130
   } else {
     doc.text('8847', 20, 120);
     doc.text(`${anno}`, 85, 120);
-    doc.text(acconto2.toFixed(2).replace('.', ','), 160, 120);
+    doc.text(acconto2.toFixed(2).replace('.', ','), 130, 120);
   }
 
-  // Totali sezione contribuente
-  if (tipoPagamento === 'saldo') {
-    doc.text((saldo + acconto1).toFixed(2).replace('.', ','), 115, 115); // Totale A a credito
-    doc.text((saldo + acconto1).toFixed(2).replace('.', ','), 145, 115); // Totale B a debito
-    doc.text('0,00', 175, 115); // Saldo (A-B)
-  } else {
-    doc.text(acconto2.toFixed(2).replace('.', ','), 115, 115);
-    doc.text(acconto2.toFixed(2).replace('.', ','), 145, 115);
-    doc.text('0,00', 175, 115);
-  }
+  // Totali a debito (colonna C)
+  const totaleC = tipoPagamento === 'saldo' ? saldo + acconto1 : acconto2;
+  doc.text(totaleC.toFixed(2).replace('.', ','), 115, 138); // Totale C (colonna a debito)
+  // Totale D (a credito) lasciato vuoto
+  doc.text(totaleC.toFixed(2).replace('.', ','), 175, 138); // Saldo (C-D)
 
-  doc.text(totaleVersato.toFixed(2).replace('.', ','), 175, 255); // Saldo finale
+  doc.text(totaleVersato.toFixed(2).replace('.', ','), 175, 253); // Saldo finale
   doc.save(`F24_${tipoPagamento}.pdf`);
 }

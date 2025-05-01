@@ -3,174 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agenda Fiscale per il Regime Forfettario</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      padding: 30px 20px 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: start;
-      width: 100%;
-      max-width: 900px;
-    }
-    header img {
-      height: 180px;
-      margin-right: 20px;
-    }
-    header h1 {
-      font-size: 24px;
-    }
-    #main-container {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 30px;
-      width: 100%;
-      max-width: 1000px;
-    }
-    #calcolo-container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 400px;
-    }
-    input, select, button {
-      padding: 10px;
-      margin: 5px;
-      width: 85%;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #storico-fatture, #pagamenti-previsti {
-      margin-top: 30px;
-      text-align: left;
-      width: 90%;
-      max-width: 950px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 6px;
-      font-size: 14px;
-    }
-    th {
-      background-color: #eee;
-    }
-    #fatturabile-box {
-      border: 2px solid #007bff;
-      border-radius: 12px;
-      padding: 20px;
-      background-color: #ffffff;
-      width: 250px;
-      font-size: 16px;
-    }
-    .delete-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: red;
-      font-size: 16px;
-    }
-    footer {
-      margin-top: 40px;
-      font-size: 14px;
-      color: #777;
-      text-align: center;
-    }
-  </style>
+  <title>Agenda Fiscale - Regime Forfettario</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-<body>
-  <header>
-    <img src="logo.png?v=3" alt="Logo">
-    <h1>Agenda Fiscale per il Regime Forfettario</h1>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center p-6">
+
+  <!-- Header -->
+  <header class="flex items-center gap-4 mb-8 w-full max-w-5xl">
+    <img src="logo.png" alt="Logo" class="h-[180px]">
+    <h1 class="text-3xl font-semibold text-gray-800">Agenda Fiscale per il Regime Forfettario</h1>
   </header>
 
-  <div id="main-container">
-    <div>
-      <div id="tipo-azienda-container">
-        <h2>Seleziona il tuo regime</h2>
-        <button onclick="setTipoAzienda('start-up')">Start-Up (5%)</button>
-        <button onclick="setTipoAzienda('forfettario')">Standard (15%)</button>
+  <!-- Main -->
+  <main class="w-full max-w-5xl flex flex-col gap-10">
+
+    <!-- Dati contribuente -->
+    <section class="bg-white rounded-2xl shadow-md p-8">
+      <h2 class="text-xl font-bold text-blue-800 mb-4">Dati del contribuente</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <input id="nome" placeholder="Nome" class="p-3 border border-gray-300 rounded-lg" />
+        <input id="cognome" placeholder="Cognome" class="p-3 border border-gray-300 rounded-lg" />
+        <input id="codiceFiscale" placeholder="Codice Fiscale" class="p-3 border border-gray-300 rounded-lg" />
       </div>
+    </section>
 
-      <div id="calcolo-container" style="display:none;">
-        <label for="previdenza">Tipo di Previdenza:</label>
-        <select id="previdenza">
-          <option value="gestione-separata">Gestione Separata INPS</option>
-          <option value="cassa-privata">Cassa Previdenziale</option>
-        </select><br>
-
-        <label for="ateco">Codice ATECO:</label>
-        <select id="ateco">
-          <option value="0.78">Attività Professionali (78%)</option>
-          <option value="0.62">Servizi di Supporto (62%)</option>
-          <option value="0.40">Commercio (40%)</option>
-          <option value="0.86">Industria/Artigianato (86%)</option>
-        </select><br>
-
-        <label for="data">Data Fattura:</label>
-        <input type="date" id="data"><br>
-
-        <label for="fatturato">Importo fattura (€):</label>
-        <input type="number" id="fatturato" placeholder="Es: 1000"><br><br>
-
-        <button onclick="aggiungiFattura()">Aggiungi Fattura</button>
+    <!-- Tipo di azienda -->
+    <section class="bg-white rounded-2xl shadow-md p-8">
+      <h2 class="text-xl font-bold text-blue-800 mb-4">Tipo di attività</h2>
+      <div class="flex gap-6">
+        <button onclick="setTipoAzienda('start-up')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Start-up</button>
+        <button onclick="setTipoAzienda('standard')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Forfettario Standard</button>
       </div>
-    </div>
+    </section>
 
-    <div id="fatturabile-box">
-      <h3>Residuo Fatturabile</h3>
-      <p id="residuo">€ 85.000,00</p>
-    </div>
-  </div>
+    <!-- Inserimento fattura -->
+    <section id="inputs-fattura" class="bg-white rounded-2xl shadow-md p-8 hidden">
+      <h2 class="text-xl font-bold text-blue-800 mb-4">Nuova Fattura</h2>
+      <div class="grid md:grid-cols-4 gap-4">
+        <input type="date" id="data" class="p-3 border border-gray-300 rounded-lg" />
+        <input type="number" id="fatturato" placeholder="Importo (€)" class="p-3 border border-gray-300 rounded-lg" />
+        <select id="previdenza" onchange="aggiornaPrevidenza()" class="p-3 border border-gray-300 rounded-lg">
+          <option value="">Seleziona Previdenza</option>
+          <option value="gestione-separata">Gestione Separata</option>
+          <option value="cassa-privata">Cassa Privata</option>
+          <option value="commerciante">Commerciante</option>
+        </select>
+        <input type="text" id="ateco" placeholder="Coefficiente ATECO" class="p-3 border border-gray-300 rounded-lg bg-gray-100" readonly />
+      </div>
+      <button onclick="aggiungiFattura()" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Aggiungi Fattura</button>
+    </section>
 
-  <div id="storico-fatture" style="display:none;">
-    <h3>Storico Fatture</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Importo</th>
-          <th>Imponibile</th>
-          <th>INPS/Cassa</th>
-          <th>Imposta</th>
-          <th>Totale</th>
-          <th>Netto</th>
-          <th>Trimestre</th>
-          <th>Azioni</th>
-        </tr>
-      </thead>
-      <tbody id="lista-fatture"></tbody>
-    </table>
-    <h4 id="totali-trimestre"></h4>
-  </div>
+    <!-- Storico fatture -->
+    <section id="storico-fatture" class="bg-white rounded-2xl shadow-md p-8 hidden">
+      <h2 class="text-xl font-bold text-blue-800 mb-4">Storico Fatture</h2>
+      <table class="w-full text-sm text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-2 border">Data</th>
+            <th class="p-2 border">Importo</th>
+            <th class="p-2 border">Imponibile</th>
+            <th class="p-2 border">INPS</th>
+            <th class="p-2 border">Imposte</th>
+            <th class="p-2 border">Totale</th>
+            <th class="p-2 border">Netto</th>
+            <th class="p-2 border">Trimestre</th>
+            <th class="p-2 border text-center">❌</th>
+          </tr>
+        </thead>
+        <tbody id="lista-fatture"></tbody>
+      </table>
+    </section>
 
-  <div id="pagamenti-previsti" style="display:none;">
-    <h3>Pagamenti Previsti</h3>
-    <p id="pagamenti"></p>
-  </div>
+    <!-- Residuo annuale -->
+    <section id="residuo-container" class="bg-white rounded-2xl shadow-md p-8 hidden">
+      <h2 class="text-xl font-bold text-blue-800 mb-4">Residuo disponibile nel regime forfettario</h2>
+      <p class="text-lg">Residuo annuale disponibile: <span id="residuo" class="font-bold text-red-600">€ 85.000,00</span></p>
+    </section>
 
-  <footer>
-    © 2025 - Hemy Srls
+    <!-- Riepilogo contributi -->
+    <section id="riepilogo-contributi" class="bg-white rounded-2xl shadow-md p-8 hidden">
+      <h2 class="text-xl font-bold text-blue-800 mb-4">Riepilogo contributi e imposte</h2>
+      <div id="riepilogo" class="text-lg text-gray-700"></div>
+    </section>
+
+    <!-- Pagamenti previsti -->
+    <section id="pagamenti-previsti" class="bg-white rounded-2xl shadow-md p-8 hidden">
+      <h2 class="text-xl font-bold text-blue-800 mb-4">Previsione versamenti F24</h2>
+      <div id="pagamenti" class="text-lg text-gray-700"></div>
+    </section>
+
+    <!-- Generazione PDF -->
+    <section id="pdf-generator" class="bg-white rounded-2xl shadow-md p-8 hidden">
+      <h2 class="text-xl font-bold text-blue-800 mb-4">Genera Fac-simile F24</h2>
+      <select id="tipoPagamento" class="p-3 border border-gray-300 rounded-lg mb-4">
+        <option value="saldo">Saldo e Primo Acconto (30 Giugno)</option>
+        <option value="secondo-acconto">Secondo Acconto (30 Novembre)</option>
+      </select>
+      <br />
+      <button onclick="generaF24PDF()" class="mt-4 bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-800">Genera PDF</button>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-gray-500 text-sm mt-12">
+    Copyright 2024 - Hemy Srls
   </footer>
 
   <script src="script.js"></script>
